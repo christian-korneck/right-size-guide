@@ -1,18 +1,41 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
 	"syscall"
 	"time"
 )
 
 func main() {
 
-	cmdstr := "/usr/bin/yes"
-	sampletime := 2
+	var cmdstr string
+	var sampletime int
+	if len(os.Args) >= 2 {
+		fmt.Println(os.Args[1])
+		cmdstr = os.Args[1]
+	} else {
+		fmt.Println("/usr/bin/yes")
+		cmdstr = "/usr/bin/yes"
 
+	}
+
+	if len(os.Args) >= 3 {
+		var err error
+		sampletime, err = strconv.Atoi(os.Args[2])
+		fmt.Println(sampletime)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+	} else {
+		sampletime = 2
+	}
+
+	//cmdstr := "/usr/bin/yes"
 	done := make(chan bool)
 	cmd := exec.Command(cmdstr)
 	go func() {
